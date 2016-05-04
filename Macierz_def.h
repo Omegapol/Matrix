@@ -2,9 +2,8 @@
 #define MACIERZ_DEF_H
 
 #include <iostream>
-#include <cstdarg>		//biblioteka dla zdefiniowania funkcji ze zmnienna liczba argumentow
 #include <array>
-//konstruktor bezparametrowy klasy aghMatrix
+
 template<class T>
 aghMatrix<T>::aghMatrix()
 {
@@ -12,6 +11,7 @@ aghMatrix<T>::aghMatrix()
 	rozmiary = 0;
 	tab = NULL;
 }
+
 template<class T>
 template<typename... Arguments>
 void aghMatrix<T>::setItems(int row, int col, Arguments ... args)
@@ -35,7 +35,6 @@ void aghMatrix<T>::setItems(int row, int col, Arguments ... args)
 }
 
 
-//funkcja setitems jako argument przyjmuje wskaznik na poczatek tablicy
 template<class T>
 void aghMatrix<T>::setItems(T *tab)
 {
@@ -49,8 +48,6 @@ void aghMatrix<T>::setItems(T *tab)
 	}
 }
 
-//funkcja setItem przyjmuje trzy argumenty: nr wiersza i kolumny macierzy oraz wartosc
-//sluzy do przypisywania wartosci konkretnemu elementowi w macierzy
 template<class T>
 void aghMatrix<T>::setItem(int row, int col, T value)
 {
@@ -60,7 +57,7 @@ void aghMatrix<T>::setItem(int row, int col, T value)
 //konstruktor klasy aghMatrix z parametrem
 //tworzymy tablice elementow dla macierzy
 template<class T>
-aghMatrix<T>::aghMatrix(aghMatrix<T> & Matrix)
+aghMatrix<T>::aghMatrix(const aghMatrix<T> & Matrix)
 {
 	rozmiarx = Matrix.getRozmiarx();
 	rozmiary = Matrix.getRozmiary();
@@ -75,7 +72,6 @@ aghMatrix<T>::aghMatrix(aghMatrix<T> & Matrix)
 	}
 }
 
-//operator = przypisuje do macierzy inna, zadana macierz 
 template<class T>
 aghMatrix<T> & aghMatrix<T>::operator=(aghMatrix<T> value)
 {
@@ -103,35 +99,30 @@ aghMatrix<T> & aghMatrix<T>::operator=(aghMatrix<T> value)
 	return *this;
 }
 
-//operator + dodajacy do siebie dwie macierze
 template<class T>
 aghMatrix<T> aghMatrix<T>::operator+(aghMatrix<T> & value)
 {
 	return add(value);
 }
 
-//operator * mnozacy dwie macierze
 template<class T>
 aghMatrix<T> aghMatrix<T>::operator*(aghMatrix<T> & value)
 {
 	return mul(value);
 }
 
-//operator == zwraca true w przypadku,gdy dwie porownywane macierze sa sobie rowne
 template<class T>
 bool aghMatrix<T>::operator==(aghMatrix<T> & value)
 {
 	return compare(value);
 }
 
-//operator != , ktory zwraca true, jezeli dwie porownywane macierze sa od siebie rozne
 template<class T>
 bool aghMatrix<T>::operator!=(aghMatrix<T> &value)
 {
 	return !compare(value);
 }
 
-//operator (),ktory pozwala na pobranie elementu z konkretnego wiersza i kolumny macierzy
 template<class T>
 T& aghMatrix<T>::operator()(int row, int col)
 {
@@ -142,7 +133,6 @@ T& aghMatrix<T>::operator()(int row, int col)
 	return this->tab[row][col];
 }
 
-//konstruktor klasy aghMatrix tworzacy macierz o zadanych wymiarach
 template<class T>
 aghMatrix<T>::aghMatrix(int rozmiarx, int rozmiary)
 {
@@ -161,7 +151,6 @@ aghMatrix<T>::aghMatrix(int rozmiarx, int rozmiary)
 	}
 }
 
-//destrukror klasy aghMatrix
 template<class T>
 aghMatrix<T>::~aghMatrix()
 {
@@ -179,7 +168,7 @@ aghMatrix<T>::~aghMatrix()
 }
 
 template<class T>
-inline void aghMatrix<T>::Resize(int row, int col)
+void aghMatrix<T>::Resize(int row, int col)
 {
 	if (tab != NULL)
 	{
@@ -200,45 +189,33 @@ inline void aghMatrix<T>::Resize(int row, int col)
 	}
 }
 
-//funkcja getRozmiarx() zwraca ilosc wierszy danej macierzy
 template<class T>
-int aghMatrix<T>::getRozmiarx()
+int aghMatrix<T>::getRozmiarx() const
 {
 	return this->rozmiarx;
 }
 
-//funkcja getRozmiary() zwraca ilosc kolumn danej macierzy
 template<class T>
-int aghMatrix<T>::getRozmiary()
+int aghMatrix<T>::getRozmiary() const
 {
 	return this->rozmiary;
 }
 
-//funkcja pobierajaca konkretny element z macierzy
-//WTF?!
-template<class T>
-T aghMatrix<T>::Pobierz(int wiersz, int kolumna)
-{
-	if (wiersz > rozmiarx || kolumna > rozmiary || kolumna <= 0 || wiersz <= 0)
-	{
-		cout << "bledna kolumna lub wiersz" << endl;
-		return 0;
-	}
-	return tab[wiersz - 1][kolumna - 1];
-}
 
-//funkcja dodajaca do siebie dwie macierze
+//\\desc: funkcja dodajaca macierze
+//\\param aghMatrix<T> value : macierz dodawana
+//\\throws
 template<class T>
-aghMatrix<T> aghMatrix<T>::Dodaj(aghMatrix<T> value)
+aghMatrix<T> aghMatrix<T>::add(aghMatrix<T> value)
 {
 	if ((this->rozmiary == value.getRozmiary()) && (this->rozmiarx == value.getRozmiarx()))
 	{
-		aghMatrix result(rozmiarx, rozmiary);
+		aghMatrix<T> result(rozmiarx, rozmiary);
 		for (int i = 0; i < rozmiarx; i++)
 		{
 			for (int j = 0; j < rozmiary; j++)
 			{
-				result.tab[i][j] = value.tab[i][j]+(this->tab[i][j]);
+				result.tab[i][j] = value.tab[i][j] + (this->tab[i][j]);
 			}
 		}
 		return result;
@@ -246,16 +223,8 @@ aghMatrix<T> aghMatrix<T>::Dodaj(aghMatrix<T> value)
 	else
 	{
 		throw aghException();
-		cout << " nie mozna dodac" << endl;
-		return aghMatrix();
+		return aghMatrix<T>();
 	}
-}
-
-//funkcja dodajaca
-template<class T>
-aghMatrix<T> aghMatrix<T>::add(aghMatrix<T> Matrix)
-{
-	return Dodaj(Matrix);
 }
 
 
@@ -265,7 +234,7 @@ aghMatrix<T> aghMatrix<T>::mul(aghMatrix<T> Matrix)
 {
 	if ((this->rozmiary == Matrix.getRozmiarx()))
 	{
-		aghMatrix result(this->rozmiarx, Matrix.getRozmiary());
+		aghMatrix<T> result(this->rozmiarx, Matrix.getRozmiary());
 
 		for (int i = 0; i < rozmiarx; i++)
 		{
@@ -290,13 +259,14 @@ aghMatrix<T> aghMatrix<T>::mul(aghMatrix<T> Matrix)
 	else
 	{
 		throw aghException();
-		return aghMatrix();
+		return aghMatrix<T>();
 	}
 }
 
+
 //mnozenie macierzy przez liczbe
 template<class T>
-aghMatrix<T> aghMatrix<T>::Mnozenie(T value)
+aghMatrix<T> aghMatrix<T>::mul(T value)
 {
 	aghMatrix result(rozmiarx, rozmiary);
 	for (int i = 0; i < rozmiarx; i++)
@@ -307,13 +277,6 @@ aghMatrix<T> aghMatrix<T>::Mnozenie(T value)
 		}
 	}
 	return result;
-}
-
-//mnozenie macierzy przez liczbe
-template<class T>
-aghMatrix<T> aghMatrix<T>::mul(T value)
-{
-	return Mnozenie(value);
 }
 
 //porownywanie macierzy, funkcja zwraca true,jezeli dwie macierze sa sobie rowne
@@ -336,22 +299,6 @@ bool aghMatrix<T>::compare(aghMatrix<T> & value)
 		}
 	}
 	return true;
-}
-
-//potrzebne to jest?
-template<class T>
-string aghMatrix<T>::print()
-{
-	string r = "";
-	for (int i = 0; i < rozmiarx; i++)
-	{
-		for (int j = 0; j < rozmiary; j++)
-		{
-			r += to_string(this->tab[i][j].rz) + "i" + to_string(this->tab[i][j].ur) + "\t";
-		}
-		r += '\n';
-	}
-	return r;
 }
 
 #endif

@@ -3,8 +3,8 @@
 
 using namespace std;
 
-//Operatory specjalizowane, w osobnym pliku?
 //operator specjalizowany + typu char,umozliwia dodawanie macierzy typu char
+template<>
 aghMatrix<char> aghMatrix<char>:: operator +(aghMatrix<char> &value)
 {
 	//tmp1,tmp2 - zmienne pomocnicze
@@ -25,6 +25,7 @@ aghMatrix<char> aghMatrix<char>:: operator +(aghMatrix<char> &value)
 }
 
 //operator specjalizowany * typu char, umozliwia mnozenie macierzy typu char
+template<>
 aghMatrix<char> aghMatrix<char>::operator *(aghMatrix<char> &value)
 {
 	aghMatrix <int> matrix1(rozmiarx, rozmiary);
@@ -49,16 +50,18 @@ aghMatrix<char> aghMatrix<char>::operator *(aghMatrix<char> &value)
 	{
 		for (int j = 0; j < matrix1.getRozmiary(); j++)
 		{
-			result(i, j) = ((char)(matrix1(i, j) %26) + (int)'a');
+			result(i, j) = ((char)(matrix1(i, j) % 26) + (int)'a');
 		}
 	}
+
 	return result;
 }
 
 //operator specjalizowany + dla typu string,umozliwia dodawanie macierzy typu string
+template<>
 aghMatrix<string> aghMatrix<string>::operator +(aghMatrix &value)
 {
-	aghMatrix <string> result(rozmiarx,rozmiary);
+	aghMatrix <string> result(rozmiarx, rozmiary);
 	for (int i = 0; i < rozmiarx; i++)
 	{
 		for (int j = 0; j < rozmiary; j++)
@@ -70,6 +73,7 @@ aghMatrix<string> aghMatrix<string>::operator +(aghMatrix &value)
 }
 
 //operator specjalizowany * dla typu string, umozliwia mnozenie macierzy typu string
+template<>
 aghMatrix<string> aghMatrix<string>::operator *(aghMatrix & Matrix)
 {
 	if ((this->rozmiary == Matrix.getRozmiarx()))
