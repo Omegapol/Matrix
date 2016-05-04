@@ -9,6 +9,7 @@ public:
 	~aghComplex();
 	aghComplex operator +(const aghComplex & value);
 	aghComplex operator *(const aghComplex & value);
+	bool operator!=(const aghComplex & value);
 	aghComplex(double real);
 	double real, imag;
 private:

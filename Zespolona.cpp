@@ -37,6 +37,18 @@ aghComplex aghComplex::operator*(const aghComplex & value)
 	return mul(value);
 }
 
+bool aghComplex::operator!=(const aghComplex & value)
+{
+	if (value.real == this->real)
+	{
+		if (value.imag == this->imag)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 //dodawanie dwoch liczb zespolonych do siebie
 aghComplex aghComplex::add(aghComplex Complex)
 {

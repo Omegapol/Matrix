@@ -10,21 +10,21 @@ class aghMatrix
 {
 public:
 	aghMatrix();
+	aghMatrix(aghMatrix &Matrix);
+	aghMatrix(int rozmiarx, int rozmiary);
+	~aghMatrix();
+	void Resize(int row, int col);
 	void setItems(int row, int col, T ...);
 	void setItems(T *tab);
-	T setItem(int row, int col, T value);
-	aghMatrix & operator =(aghMatrix & value);
+	void setItem(int row, int col, T value);
+	aghMatrix & operator =(aghMatrix value);
 	aghMatrix operator +(aghMatrix & value);
 	aghMatrix operator *(aghMatrix & value);
 	bool operator ==(aghMatrix & value);
 	bool operator !=(aghMatrix & value);
 	T& operator ()(int row, int col);
-	aghMatrix(aghMatrix &Matrix);
-	aghMatrix(int rozmiarx, int rozmiary);
-	~aghMatrix();
 	int getRozmiarx();
 	int getRozmiary();
-	aghMatrix Mnozenie(aghMatrix Matrix);
 private:
 	T Pobierz(int wiersz, int kolumna);
 	aghMatrix Dodaj(aghMatrix Matrix);
@@ -36,8 +36,9 @@ private:
 	aghMatrix(char* x);
 	T** tab;
 	string print();
-	//rozmiarx-liczba wierszy macierzy, rozmiary-liczba kolumn 
+	//\\rozmiarx-liczba wierszy macierzy, 
 	int rozmiarx;
+	//\\rozmiary-liczba kolumn 
 	int rozmiary;
 
 };
@@ -46,9 +47,19 @@ private:
 #include "Macierz_def.h"
 
 //deklaracja operatorow specjalizowanych dla klasy aghMatrix
+template<>
 aghMatrix<string> aghMatrix<string>::operator +(aghMatrix &);
+
+
+template<>
 aghMatrix<string> aghMatrix<string>::operator *(aghMatrix &);
+
+template<>
 aghMatrix<char> aghMatrix<char>::operator +(aghMatrix &);
+
+template<>
+aghMatrix<char> aghMatrix<char>::operator *(aghMatrix &);
+
 string polaczS(string val1, string val2);
 
 #endif

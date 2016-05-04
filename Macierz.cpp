@@ -18,7 +18,7 @@ aghMatrix<char> aghMatrix<char>:: operator +(aghMatrix<char> &value)
 			tmp2 = (int)value(i, j) - (int)'a';
 			tmp1 += tmp2;
 			tmp1 = tmp1 % 26;
-			result(i, j) = tmp1;
+			result(i, j) = tmp1 + (int)'a';
 		}
 	}
 	return result;
@@ -43,13 +43,13 @@ aghMatrix<char> aghMatrix<char>::operator *(aghMatrix<char> &value)
 			matrix2(i, j) = (int)value(i, j) - (int)'a';
 		}
 	}
-	matrix1 = matrix1.Mnozenie(matrix2);
+	matrix1 = matrix1*matrix2;
 	aghMatrix <char> result(matrix1.getRozmiarx(), matrix1.getRozmiary());
 	for (int i = 0; i < matrix1.getRozmiarx(); i++)
 	{
 		for (int j = 0; j < matrix1.getRozmiary(); j++)
 		{
-			result(i, j) = (char)(matrix1(i, j) + (int)'a');
+			result(i, j) = ((char)(matrix1(i, j) %26) + (int)'a');
 		}
 	}
 	return result;
