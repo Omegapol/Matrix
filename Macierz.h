@@ -14,7 +14,8 @@ public:
 	aghMatrix(int rozmiarx, int rozmiary);
 	~aghMatrix();
 	void Resize(int row, int col);
-	void setItems(int row, int col, T ...);
+	template<class ... Arguments>void setItems(int wiersze, int kolumny, Arguments... args);
+	//void setItems(int row, int col, T ...);
 	void setItems(T *tab);
 	void setItem(int row, int col, T value);
 	aghMatrix & operator =(aghMatrix value);
@@ -61,5 +62,6 @@ template<>
 aghMatrix<char> aghMatrix<char>::operator *(aghMatrix &);
 
 string polaczS(string val1, string val2);
+string iloczS(string val1, string val2);
 
 #endif

@@ -43,10 +43,10 @@ bool aghComplex::operator!=(const aghComplex & value)
 	{
 		if (value.imag == this->imag)
 		{
-			return true;
+			return false;
 		}
 	}
-	return false;
+	return true;
 }
 
 //dodawanie dwoch liczb zespolonych do siebie

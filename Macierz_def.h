@@ -3,8 +3,7 @@
 
 #include <iostream>
 #include <cstdarg>		//biblioteka dla zdefiniowania funkcji ze zmnienna liczba argumentow
-#include "Macierz.h"
-
+#include <array>
 //konstruktor bezparametrowy klasy aghMatrix
 template<class T>
 aghMatrix<T>::aghMatrix()
@@ -13,21 +12,26 @@ aghMatrix<T>::aghMatrix()
 	rozmiary = 0;
 	tab = NULL;
 }
-
 template<class T>
-void aghMatrix<T>::setItems(int row, int col, T ...)
+template<typename... Arguments>
+void aghMatrix<T>::setItems(int row, int col, Arguments ... args)
 {
+	array<T, sizeof...(args)>unpacked_args{ args... };
+
 	this->Resize(row, col);
-	va_list arguments;
-	va_start(arguments, col);
-	for (int i = 0; i < row; i++)
+	int i = 0;
+	int j = 0;
+
+	for (T arg : unpacked_args)
 	{
-		for (int j = 0; j < col; j++)
+		tab[i][j] = arg;
+		j++;
+		if (j == rozmiary)
 		{
-			this->tab[i][j] = va_arg(arguments, T);
+			j = 0;
+			i++;
 		}
 	}
-	va_end(arguments);
 }
 
 
@@ -131,7 +135,7 @@ bool aghMatrix<T>::operator!=(aghMatrix<T> &value)
 template<class T>
 T& aghMatrix<T>::operator()(int row, int col)
 {
-	if (row<0 || row>rozmiarx || col<0 || col>rozmiary)
+	if (row<0 || row>=rozmiarx || col<0 || col>=rozmiary)
 	{
 		throw aghException();
 	}

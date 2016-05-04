@@ -58,7 +58,7 @@ aghMatrix<char> aghMatrix<char>::operator *(aghMatrix<char> &value)
 //operator specjalizowany + dla typu string,umozliwia dodawanie macierzy typu string
 aghMatrix<string> aghMatrix<string>::operator +(aghMatrix &value)
 {
-	aghMatrix <string> result;
+	aghMatrix <string> result(rozmiarx,rozmiary);
 	for (int i = 0; i < rozmiarx; i++)
 	{
 		for (int j = 0; j < rozmiary; j++)
@@ -70,9 +70,37 @@ aghMatrix<string> aghMatrix<string>::operator +(aghMatrix &value)
 }
 
 //operator specjalizowany * dla typu string, umozliwia mnozenie macierzy typu string
-aghMatrix<string> aghMatrix<string>::operator *(aghMatrix &)
+aghMatrix<string> aghMatrix<string>::operator *(aghMatrix & Matrix)
 {
-	return aghMatrix<string>(15, 15);
+	if ((this->rozmiary == Matrix.getRozmiarx()))
+	{
+		aghMatrix<string> result(this->rozmiarx, Matrix.getRozmiary());
+
+		for (int i = 0; i < rozmiarx; i++)
+		{
+			for (int j = 0; j < Matrix.getRozmiary(); j++)
+			{
+				result(i, j) = "";
+			}
+		}
+
+		for (int i = 0; i < rozmiarx; i++)
+		{
+			for (int j = 0; j < Matrix.getRozmiary(); j++)
+			{
+				for (int k = 0; k < this->rozmiary; k++)
+				{
+					result.tab[i][j] = polaczS(result.tab[i][j], iloczS(this->tab[i][k], (Matrix.tab[k][j])));
+				}
+			}
+		}
+		return result;
+	}
+	else
+	{
+		throw aghException();
+		return aghMatrix<string>();
+	}
 }
 
 //funkcja laczaca ze soba zmienne typu string, rezultatem jest string bedacy ilorazem dwoch obiektow typu string
@@ -110,6 +138,28 @@ string polaczS(string val1, string val2)
 		if (czyDodac)
 		{
 			result += val2[i];
+		}
+	}
+	return result;
+}
+
+string iloczS(string val1, string val2)
+{
+	string result;
+	for (int i = 0; i < val1.length(); i++)
+	{
+		bool czyDodac = false;
+		for (int j = 0; j < val2.length(); j++)
+		{
+			if (val1[i] == val2[j])
+			{
+				czyDodac = true;
+				break;
+			}
+		}
+		if (czyDodac)
+		{
+			result += val1[i];
 		}
 	}
 	return result;
