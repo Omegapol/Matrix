@@ -4,6 +4,9 @@
 #include <iostream>
 #include <array>
 
+/////------------------------public--------------------------
+
+////-----------------------constructors----------------------
 template<class T>
 aghMatrix<T>::aghMatrix()
 {
@@ -12,50 +15,6 @@ aghMatrix<T>::aghMatrix()
 	tab = NULL;
 }
 
-template<class T>
-template<typename... Arguments>
-void aghMatrix<T>::setItems(int row, int col, Arguments ... args)
-{
-	array<T, sizeof...(args)>unpacked_args{ args... };
-
-	this->Resize(row, col);
-	int i = 0;
-	int j = 0;
-
-	for (T arg : unpacked_args)
-	{
-		tab[i][j] = arg;
-		j++;
-		if (j == rozmiary)
-		{
-			j = 0;
-			i++;
-		}
-	}
-}
-
-
-template<class T>
-void aghMatrix<T>::setItems(T *tab)
-{
-	for (int i = 0; i < rozmiarx; i++)
-	{
-		for (int j = 0; j < rozmiary; j++)
-		{
-			//mozliwy wyjatek
-			this->tab[i][j] = tab[i*rozmiary +j];
-		}
-	}
-}
-
-template<class T>
-void aghMatrix<T>::setItem(int row, int col, T value)
-{
-	this->tab[row][col] = value;
-}
-
-//konstruktor klasy aghMatrix z parametrem
-//tworzymy tablice elementow dla macierzy
 template<class T>
 aghMatrix<T>::aghMatrix(const aghMatrix<T> & Matrix)
 {
@@ -71,6 +30,44 @@ aghMatrix<T>::aghMatrix(const aghMatrix<T> & Matrix)
 		}
 	}
 }
+
+template<class T>
+aghMatrix<T>::aghMatrix(int rozmiarx, int rozmiary)
+{
+	this->rozmiarx = rozmiarx;
+	this->rozmiary = rozmiary;
+	if (rozmiarx < 1 || rozmiary < 1)
+	{
+		tab = NULL;
+		throw aghException();
+		return;
+	}
+	tab = new T*[rozmiarx];
+	for (int i = 0; i < rozmiarx; i++)
+	{
+		tab[i] = new T[rozmiary];
+	}
+}
+
+/////----------------------destructor--------------------------------
+template<class T>
+aghMatrix<T>::~aghMatrix()
+{
+	if (tab != NULL)
+	{
+		for (int i = 0; i < rozmiarx; i++)
+		{
+			delete[] tab[i];
+		}
+		delete[] tab;
+	}
+	tab = NULL;
+	rozmiarx = 0;
+	rozmiary = 0;
+}
+
+
+/////----------------------operators---------------------------------
 
 template<class T>
 aghMatrix<T> & aghMatrix<T>::operator=(aghMatrix<T> value)
@@ -133,39 +130,7 @@ T& aghMatrix<T>::operator()(int row, int col)
 	return this->tab[row][col];
 }
 
-template<class T>
-aghMatrix<T>::aghMatrix(int rozmiarx, int rozmiary)
-{
-	this->rozmiarx = rozmiarx;
-	this->rozmiary = rozmiary;
-	if (rozmiarx < 1 || rozmiary < 1)
-	{
-		tab = NULL;
-		throw aghException();
-		return;
-	}
-	tab = new T*[rozmiarx];
-	for (int i = 0; i < rozmiarx; i++)
-	{
-		tab[i] = new T[rozmiary];
-	}
-}
-
-template<class T>
-aghMatrix<T>::~aghMatrix()
-{
-	if (tab != NULL)
-	{
-		for (int i = 0; i < rozmiarx; i++)
-		{
-			delete[] tab[i];
-		}
-		delete[] tab;
-	}
-	tab = NULL;
-	rozmiarx = 0;
-	rozmiary = 0;
-}
+/////----------------------utility methods---------------------------
 
 template<class T>
 void aghMatrix<T>::Resize(int row, int col)
@@ -200,6 +165,54 @@ int aghMatrix<T>::getRozmiary() const
 {
 	return this->rozmiary;
 }
+
+
+template<class T>
+template<typename... Arguments>
+void aghMatrix<T>::setItems(int row, int col, Arguments ... args)
+{
+	array<T, sizeof...(args)>unpacked_args{ args... };
+
+	this->Resize(row, col);
+	int i = 0;
+	int j = 0;
+
+	for (T arg : unpacked_args)
+	{
+		tab[i][j] = arg;
+		j++;
+		if (j == rozmiary)
+		{
+			j = 0;
+			i++;
+		}
+	}
+}
+
+
+template<class T>
+void aghMatrix<T>::setItems(T *tab)
+{
+	for (int i = 0; i < rozmiarx; i++)
+	{
+		for (int j = 0; j < rozmiary; j++)
+		{
+			//mozliwy wyjatek
+			this->tab[i][j] = tab[i*rozmiary + j];
+		}
+	}
+}
+
+template<class T>
+void aghMatrix<T>::setItem(int row, int col, T value)
+{
+	this->tab[row][col] = value;
+}
+
+
+
+/////--------------------------------------------------------------------
+/////-----------------------------private--------------------------------
 
 
 //\\desc: funkcja dodajaca macierze

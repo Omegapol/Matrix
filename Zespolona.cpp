@@ -3,6 +3,11 @@
 #include <iostream>
 using namespace std;
 
+////----------------------------------------------------
+////---------------------public-------------------------
+
+
+////---------------------contructors--------------------
 //konstruktor klasy ahgComplex
 aghComplex::aghComplex()
 {
@@ -19,11 +24,21 @@ aghComplex::aghComplex(double rz, double ur)
 
 }
 
+//dodawanie liczby typu double do liczby zespolonej
+aghComplex::aghComplex(double real)
+{
+	imag = 0;
+	this->real = real;
+}
+
+////------------------destructor----------------------
 //destruktor dla klasy aghComplex
 aghComplex::~aghComplex()
 {
 
 }
+
+////-------------------operators----------------------
 
 //operator +,umozliwia dodawanie do siebie dwoch liczb zespolonych
 aghComplex aghComplex::operator+(const aghComplex & value)
@@ -49,6 +64,9 @@ bool aghComplex::operator!=(const aghComplex & value)
 	return true;
 }
 
+////----------------------------------------------------
+////---------------------private------------------------
+
 //dodawanie dwoch liczb zespolonych do siebie
 aghComplex aghComplex::add(aghComplex Complex)
 {
@@ -67,12 +85,6 @@ aghComplex aghComplex::mul(aghComplex Complex)
 	return result;
 }
 
-//dodawanie liczby typu double do liczby zespolonej
-aghComplex::aghComplex(double real)
-{	
-	imag = 0;
-	this->real = real;
-}
 
 //wypisywanie liczby zespolonej
 void aghComplex::wypisz()
